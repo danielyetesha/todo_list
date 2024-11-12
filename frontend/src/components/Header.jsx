@@ -1,45 +1,28 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
-  faSearch,
   faCalendarAlt,
+  faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import IconButton from "./IconButton";
 
 function Header() {
   return (
-    <header className="p-8 flex justify-between items-center bg-gray-100 gap-x-4 shadow-sm">
+    <header className="p-8 flex justify-between items-center bg-gray-100 gap-x-4 shadow-lg">
       <h1 className="text-4xl font-bold text-center">Todo App</h1>
-
-      {/* Search Input Section */}
-      <div className="relative flex items-center shadow-sm">
-        <input
-          type="text"
-          placeholder="Search your tasks here..."
-          className="w-[40rem] bg-white rounded-full px-5 py-2 outline-none"
-        />
-        <button className="absolute -right-2 bg-gray-200 rounded-full p-1 content-center">
-          <FontAwesomeIcon icon={faSearch} className="h-6 w-6 text-gray-600" />
-        </button>
-      </div>
 
       {/* Right Section with Notifications and Calendar */}
       <ul className="flex self-end justify-around items-center gap-4">
+        <IconButton icon={faBell} />
+        <IconButton icon={faCalendarAlt} />
+
         <li>
-          <button className="bg-gray-200 rounded-full p-2">
-            <FontAwesomeIcon icon={faBell} className="h-6 w-6 text-gray-600" />
-          </button>
-        </li>
-        <li>
-          <button className="bg-gray-200 rounded-full p-2">
-            <FontAwesomeIcon
-              icon={faCalendarAlt}
-              className="h-6 w-6 text-gray-600"
-            />
-          </button>
-        </li>
-        <li>
-          <p className="text-sm">Tuesday</p>
-          <p className="text-xs text-gray-500">2023-05-01</p>
+          <FontAwesomeIcon icon={faUserCircle} className="size-8" />
+          {/* <img
+            src="/path-to-profile-picture.jpg"
+            alt="Profile"
+            className="w-10 h-10 rounded-full"
+          /> */}
         </li>
       </ul>
     </header>
