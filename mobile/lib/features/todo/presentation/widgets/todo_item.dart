@@ -18,19 +18,19 @@ class TodoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateFormat dateFormat = DateFormat('MMM dd, yyyy hh:mm a');
+    final DateFormat dateFormat = DateFormat('MMM dd, yy hh:mm a');
     final formattedDate = dateFormat.format(todo.created_at);
 
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
       ),
       margin: const EdgeInsets.all(8),
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(10.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -49,32 +49,49 @@ class TodoItem extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontSize: 14, color: Colors.black54),
                 ),
-                const SizedBox(height: 16),
                 const Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      formattedDate,
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    SizedBox(
+                      width: 70,
+                      child: Text(
+                        formattedDate,
+                        maxLines: 2,
+
+                        overflow: TextOverflow
+                            .ellipsis, // Truncate if the text exceeds 2 lines
+                        style: const TextStyle(
+                          fontSize: 10,
+                          color: Colors.grey,
+                        ),
+                      ),
                     ),
                     const Spacer(),
-                    IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.blue),
-                      onPressed: onEdit,
+                    SizedBox(
+                      width: 30,
+                      child: IconButton(
+                        icon: const Icon(Icons.edit,
+                            color: Colors.blue, size: 18),
+                        onPressed: onEdit,
+                      ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: onDelete,
-                    ),
+                    SizedBox(
+                      width: 30,
+                      child: IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                        onPressed: onDelete,
+                      ),
+                    )
                   ],
                 ),
               ],
             ),
           ),
           Positioned(
-            top: 8,
-            right: 8,
+            top: 0,
+            right: -8,
             child: IconButton(
               onPressed: onToggleCompletion,
               icon: todo.completed

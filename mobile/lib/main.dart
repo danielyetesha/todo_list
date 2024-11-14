@@ -13,6 +13,7 @@ class TodoApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Todo App',
       theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
         primarySwatch: Colors.blue,
       ),
       home: TodoListPage(),
