@@ -70,7 +70,7 @@ function TodoList() {
 
   return (
     <div className="flex flex-col gap-2">
-      <TodoInput editingTodo={editingTodo} />
+      <TodoInput editingTodo={editingTodo} setEditingTodo={setEditingTodo} />
       <div>
         <p className="flex items-center gap-2 bg-custom-red p-2 rounded-lg shadow-md self-start w-fit">
           <label className="text-sm text-white font-semibold">

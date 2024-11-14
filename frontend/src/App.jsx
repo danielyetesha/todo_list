@@ -1,34 +1,48 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
 import Header from "./components/Header";
-import TodoInput from "./components/TodoInput";
 import TodosOverview from "./components/TodosOverview";
-import Calendar from "./components/Calender";
 import TodosList from "./components/TodoList";
-import { useEffect } from "react";
-import { fetchCSRFToken } from "./api/todosApi";
+import Calendar from "./components/Calender";
 
 const queryClient = new QueryClient();
 
 function App() {
-  // useEffect(() => {
-  //   // Fetch CSRF token on app load
-  //   fetchCSRFToken();
-  // }, []);
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="">
+      <div className="font-sans bg-gray-50 min-h-screen">
+        {/* Header Section */}
         <Header />
-        <main className="p-8 bg-slate-100">
-          <p className="text-4xl p-3 text-center w-full">Hello, Amde, </p>
-          <div className="flex gap-x-8 mt-3">
-            <Calendar />
-            <div className="flex flex-col gap-6 flex-1">
-              <TodosList />
+
+        {/* Main Content Area */}
+        <main className="p-8 bg-slate-100 min-h-screen">
+          <div className="max-w-7xl mx-auto">
+            {/* Greeting Section */}
+            <p className="text-4xl font-semibold text-gray-800 mb-6 text-center">
+              Hello, Amde 👋
+            </p>
+            <p className="text-lg text-center text-gray-600 mb-8">
+              Keep track of your tasks and stay organized with your personal
+              to-do list!
+            </p>
+
+            <div className="flex gap-x-8 mt-3">
+              {/* Calendar Section */}
+              <Calendar />
+
+              {/* Todo List Section */}
+              <div className="flex-1 bg-white p-6 rounded-lg shadow-lg">
+                <TodosList />
+              </div>
             </div>
           </div>
         </main>
-        <TodosOverview />
+
+        {/* Overview Section */}
+        <div className="bg-gray-200 py-6">
+          <div className="max-w-7xl mx-auto">
+            <TodosOverview />
+          </div>
+        </div>
       </div>
     </QueryClientProvider>
   );
