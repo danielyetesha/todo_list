@@ -1,35 +1,60 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  fetchTodos,
+  fetchTodo,
+  addTodo,
+  updateTodo,
+  deleteTodo,
+} from "../api/todosApi";
 
-// Fetch Todos from API
-const fetchTodos = async () => {
-  const response = await fetch("/api/todos"); // Replace with your API endpoint
-  if (!response.ok) throw new Error("Network error");
-  return response.json();
-};
+// export const useAllTodos = () => {
+//   return useQuery({
+//     queryKey: ["todos"],
+//     queryFn: fetchTodos,
+//   });
+// };
 
-// Add a new Todo
-const addTodo = async (todo) => {
-  const response = await fetch("/api/todos", {
-    method: "POST",
-    body: JSON.stringify(todo),
-    headers: { "Content-Type": "application/json" },
+export const useTodos = (page, limit = 6) => {
+  return useQuery({
+    queryKey: ["todos", page],
+    queryFn: () => fetchTodos(page, limit),
+    keepPreviousData: true, // Keep the previous page's data while fetching new data
   });
-  if (!response.ok) throw new Error("Error adding todo");
-  return response.json();
 };
 
-export const useTodos = () => {
-  return useQuery(["todos"], fetchTodos, {
-    staleTime: 10000, // Time in ms before considering the data stale
+export const useTodo = (id) => {
+  return useQuery({
+    queryKey: ["todos", id],
+    queryFn: () => fetchTodo(id),
   });
 };
 
 export const useAddTodo = () => {
   const queryClient = useQueryClient();
-
-  return useMutation(addTodo, {
+  return useMutation({
+    mutationFn: addTodo,
     onSuccess: () => {
-      queryClient.invalidateQueries(["todos"]); // Refetch the Todos after adding a new one
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+  });
+};
+
+export const useUpdateTodo = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateTodo,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+  });
+};
+
+export const useDeleteTodo = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteTodo,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
   });
 };

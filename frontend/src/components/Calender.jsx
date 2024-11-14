@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; // Import default styles for the calendar
 
@@ -20,7 +20,7 @@ function CustomCalendar() {
   };
 
   return (
-    <div className=" bg-white p-2 w-full md:w-1/3">
+    <div className=" bg-white p-2 w-full md:w-1/3 hidden md:block">
       {/* Display the selected date */}
       <h2 className="text-xl font-semibold mb-2 text-red-500">
         {formatDate(date).split(",")[0]} {/* Display the weekday */}
