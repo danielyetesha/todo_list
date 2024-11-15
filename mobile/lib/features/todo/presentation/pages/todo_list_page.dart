@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile/features/todo/data/data_sources/todo_data_source.dart';
 import 'package:mobile/features/todo/data/model/todo_model.dart';
 import 'package:mobile/features/todo/presentation/pages/add_new_todo.dart';
 import 'package:mobile/features/todo/presentation/widgets/todo_app_bar.dart';
 import 'package:mobile/features/todo/presentation/widgets/todo_drawer.dart';
 import 'package:mobile/features/todo/presentation/widgets/todo_item.dart';
+import 'dart:ui'; // For the BackdropFilter
 
 class TodoListPage extends StatefulWidget {
   const TodoListPage({super.key});
@@ -141,101 +143,104 @@ class _TodoListPageState extends State<TodoListPage> {
           child: TodoAppBar(scaffoldKey: _scaffoldKey),
         ),
         drawer: const TodoDrawer(),
-        body: Column(
+        body: Stack(
           children: [
-            // Add a dropdown menu for selecting the filter
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('Filter Todos:'),
-                  DropdownButton<String>(
-                    value: _filterOption,
-                    onChanged: _changeFilter,
-                    items: const [
-                      DropdownMenuItem(value: 'All', child: Text('All')),
-                      DropdownMenuItem(
-                          value: 'Completed', child: Text('Completed')),
-                      DropdownMenuItem(
-                          value: 'Pending', child: Text('Pending')),
+            
+            // Main content of the Todo List page
+            Column(
+              children: [
+                // Add a dropdown menu for selecting the filter
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Filter Todos:'),
+                      DropdownButton<String>(
+                        value: _filterOption,
+                        onChanged: _changeFilter,
+                        items: const [
+                          DropdownMenuItem(value: 'All', child: Text('All')),
+                          DropdownMenuItem(value: 'Completed', child: Text('Completed')),
+                          DropdownMenuItem(value: 'Pending', child: Text('Pending')),
+                        ],
+                      ),
                     ],
                   ),
-                ],
-              ),
-            ),
-            // Display the list of todos
-            Expanded(
-              child: FutureBuilder<List<Todo>>(
-                future: _todos,
-                builder: (context, snapshot) {
-                  // Show loading spinner when data is being fetched
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+                ),
+                // Display the list of todos
+                Expanded(
+                  child: FutureBuilder<List<Todo>>(
+                    future: _todos,
+                    builder: (context, snapshot) {
+                      // Show loading spinner when data is being fetched
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
 
-                  // Show an error message if an error occurs
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text(
-                        'Error: ${snapshot.error}',
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                    );
-                  }
+                      // Show an error message if an error occurs
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text(
+                            'Error: ${snapshot.error}',
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        );
+                      }
 
-                  // Show a message if no data is available
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text('No todos available'));
-                  }
+                      // Show a message if no data is available
+                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(child: Text('No todos available'));
+                      }
 
-                  // Filter todos based on the selected filter option
-                  final todos = snapshot.data!;
-                  List<Todo> filteredTodos;
+                      // Filter todos based on the selected filter option
+                      final todos = snapshot.data!;
+                      List<Todo> filteredTodos;
 
-                  switch (_filterOption) {
-                    case 'Completed':
-                      filteredTodos =
-                          todos.where((todo) => todo.completed).toList();
-                      break;
-                    case 'Pending':
-                      filteredTodos =
-                          todos.where((todo) => !todo.completed).toList();
-                      break;
-                    default:
-                      filteredTodos = todos;
-                  }
+                      switch (_filterOption) {
+                        case 'Completed':
+                          filteredTodos =
+                              todos.where((todo) => todo.completed).toList();
+                          break;
+                        case 'Pending':
+                          filteredTodos =
+                              todos.where((todo) => !todo.completed).toList();
+                          break;
+                        default:
+                          filteredTodos = todos;
+                      }
 
-                  return GridView.builder(
-                    padding: const EdgeInsets.all(8.0),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8,
-                    ),
-                    itemCount: filteredTodos.length,
-                    itemBuilder: (context, index) {
-                      final todo = filteredTodos[index];
-                      return TodoItem(
-                        todo: todo,
-                        onToggleCompletion: () => _toggleCompletion(todo),
-                        onEdit: () => _editTodo(todo),
-                        onDelete: () => _deleteTodo(todo.id),
+                      return GridView.builder(
+                        padding: const EdgeInsets.all(8.0),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 8,
+                        ),
+                        itemCount: filteredTodos.length,
+                        itemBuilder: (context, index) {
+                          final todo = filteredTodos[index];
+                          return TodoItem(
+                            todo: todo,
+                            onToggleCompletion: () => _toggleCompletion(todo),
+                            onEdit: () => _editTodo(todo),
+                            onDelete: () => _deleteTodo(todo.id),
+                          );
+                        },
                       );
                     },
-                  );
-                },
-              ),
-            ),
-            // Show More button when there are more todos to load
-            if (_hasMore && !_isLoading)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ElevatedButton(
-                  onPressed: _loadMoreTodos,
-                  child: const Text('Show More'),
+                  ),
                 ),
-              ),
+                // Show More button when there are more todos to load
+                if (_hasMore && !_isLoading)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: ElevatedButton(
+                      onPressed: _loadMoreTodos,
+                      child: const Text('Show More'),
+                    ),
+                  ),
+              ],
+            ),
           ],
         ),
         floatingActionButton: ElevatedButton(
@@ -249,10 +254,8 @@ class _TodoListPageState extends State<TodoListPage> {
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blue, // Blue background color
             shape: const CircleBorder(), // Circular shape for the button
-            padding: const EdgeInsets.all(
-                20), // Padding to make the button larger (adjustable)
-            minimumSize: const Size(
-                60, 60), // Minimum size to ensure it's circular and big enough
+            padding: const EdgeInsets.all(20), // Padding to make the button larger (adjustable)
+            minimumSize: const Size(60, 60), // Minimum size to ensure it's circular and big enough
           ),
           child: const Icon(
             Icons.add_outlined,

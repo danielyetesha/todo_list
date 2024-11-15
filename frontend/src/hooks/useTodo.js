@@ -5,7 +5,7 @@ import {
   addTodo,
   updateTodo,
   deleteTodo,
-} from "../api/todosApi";
+} from "../api/todosApi.js";
 
 // export const useAllTodos = () => {
 //   return useQuery({

@@ -1,8 +1,28 @@
-# React + Vite
+Frontend README.md (React.js)
+markdown
+Copy code
+# Frontend - Todo App (React.js)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend of the Todo application, built using **React.js**. It interacts with the Laravel API to manage todos, providing a user-friendly interface for viewing and editing tasks.
 
-Currently, two official plugins are available:
+## Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/danielyetesha/todo-app.git
+   cd todo-app/frontend
+Install dependencies:
+
+bash
+Copy code
+npm install
+Start the development server:
+
+bash
+Copy code
+npm start
+The app should be running at http://localhost:3000 and interact with the API server at http://localhost:8000.
+
+Mobile README.md (Flutter)
+markdown
+Copy code

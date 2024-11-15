@@ -18,7 +18,7 @@ function App() {
           <div className="max-w-7xl mx-auto">
             {/* Greeting Section */}
             <p className="text-4xl font-semibold text-gray-800 mb-6 text-center">
-              Hello, Amde 👋
+              Hello, Medanit Developers 👋
             </p>
             <p className="text-lg text-center text-gray-600 mb-8">
               Keep track of your tasks and stay organized with your personal
