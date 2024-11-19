@@ -4,7 +4,7 @@ import 'package:mobile/features/todo/data/model/todo_model.dart';
 
 class ApiService {
   final String baseUrl =
-      'http://127.0.0.1:8000'; // Change to your actual backend IP
+      'http://127.0.0.1:8000/api'; // Change to your actual backend IP
 
   // Fetch Todos from API
   Future<List<Todo>> fetchTodos({int page = 1, int limit = 8}) async {
